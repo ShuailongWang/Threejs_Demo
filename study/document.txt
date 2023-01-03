@@ -1,0 +1,18 @@
+1. 执行npm init，创建package.json文件
+2. 执行npm install 命令, 安装模块
+3. 执行npm install parcel-bundler , 搭建parcel环境（https://www.parceljs.cn/getting_started.html）
+4. 替换package.json中的scripts内容为
+    "scripts": {
+        "dev": "parcel <your entry file>",          //测试
+        "build": "parcel build <your entry file>"   //编译导出
+    },
+5. 执行npm install parcel-bundler --save-dev, 换到dev
+    自动变成devDependencies
+    "devDependencies": {
+        "parcel-bundler": "^1.12.5"
+    },
+
+6. 执行npm install three --save, 安装Three模块
+7. 执行npm run dev, 启动本地环境
+
+8. 动画库npm install gsap
