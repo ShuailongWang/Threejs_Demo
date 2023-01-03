@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { Color } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import gsap from "gsap"
+import * as dat from "dat.gui";
 
 //场景
 const scene = new THREE.Scene();
@@ -43,6 +44,13 @@ controls.enableDamping = true;  //设置阻尼，必须在动画循环里面调�
 //添加坐标轴辅助器
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
+
+//UI界面
+const gui = new dat.GUI();
+gui.add(cubeObject.position, "x").min(0).max(5).step(0.01).name("移动x轴").onChange((value)=>{
+    console.log("changge x => " + value);
+});//设置x的值，最大
+
 
 //gsap动画
 var ani1 = gsap.to(cubeObject.position, {

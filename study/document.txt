@@ -13,6 +13,7 @@
     },
 
 6. 执行npm install three --save, 安装Three模块
-7. 执行npm run dev, 启动本地环境
+7. 执行 npm run dev, 启动本地环境
 
-8. 动画库npm install gsap
+8. 动画库 npm install gsap
+9. UI界面库 npm install --save dat.gui
