@@ -44922,37 +44922,57 @@ controls.enableDamping = true; //设置阻尼，必须在动画循环里面调�
 //添加坐标轴辅助器
 var axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
+var ani1;
+function startAnimation() {
+  //gsap动画
+  ani1 = _gsap.default.to(cubeObject.position, {
+    x: 5,
+    duration: 5,
+    //时长
+    ease: "power1.inOut",
+    //动画
+    repeat: 2,
+    //重复
+    yoyo: true,
+    //往返
+    delay: 2,
+    //延迟两秒移动
+    onComplete: function onComplete() {
+      console.log("动画完成");
+    },
+    onStart: function onStart() {
+      console.log("动画开始");
+    }
+  }); //x移动，时长5秒
+  _gsap.default.to(cubeObject.rotation, {
+    x: 2 * Math.PI,
+    duration: 5
+  }); //旋转
+}
 
 //UI界面
 var gui = new dat.GUI();
 gui.add(cubeObject.position, "x").min(0).max(5).step(0.01).name("移动x轴").onChange(function (value) {
   console.log("changge x => " + value);
+}).onFinishChange(function (value) {
+  console.log("停止" + value);
 }); //设置x的值，最大
 
-//gsap动画
-var ani1 = _gsap.default.to(cubeObject.position, {
-  x: 5,
-  duration: 5,
-  //时长
-  ease: "power1.inOut",
-  //动画
-  repeat: 2,
-  //重复
-  yoyo: true,
-  //往返
-  delay: 2,
-  //延迟两秒移动
-  onComplete: function onComplete() {
-    console.log("动画完成");
-  },
-  onStart: function onStart() {
-    console.log("动画开始");
+//修改颜色
+var params = {
+  color: "#ffff00",
+  fn: function fn() {
+    startAnimation();
   }
-}); //x移动，时长5秒
-_gsap.default.to(cubeObject.rotation, {
-  x: 2 * Math.PI,
-  duration: 5
-}); //旋转
+};
+gui.addColor(params, 'color').onChange(function (value) {
+  console.log("颜色修改：" + value);
+  cubeObject.material.color.set(value);
+});
+gui.add(cubeObject, "visible").name("是否显示");
+gui.add(params, "fn").name("开始动画");
+var gFolder = gui.addFolder("设置");
+gFolder.add(cubeObject.material, "wireframe");
 
 //监听双击事件
 window.addEventListener("dblclick", function () {
@@ -45034,7 +45054,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65520" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49759" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
