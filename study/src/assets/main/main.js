@@ -7,7 +7,7 @@ import * as dat from "dat.gui";
 //场景
 const scene = new THREE.Scene();
 
-//相机
+//相机，（视野、纵横比、近平面、远平面）
 const mainCamera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 mainCamera.position.set(0, 0, 10);
 scene.add(mainCamera);
