@@ -16,8 +16,10 @@ onUpdate();
 function init(){
     //场景
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xa0a0a0 );
-    //scene.fog = new THREE.Fog( 0xa0a0a0, 200, 1000 );
+    const envirTexture = new THREE.TextureLoader().load("./model/tex1.7/background.jpg");
+    envirTexture.mapping = THREE.EquirectangularReflectionMapping;  //映射，告诉是什么类型
+    scene.background = envirTexture;    //场景背景
+    scene.environment = envirTexture;   //场景所有的物体添加默认的环境贴图
 
     //相机
     mainCamera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
