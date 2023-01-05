@@ -36993,11 +36993,133 @@ var MapControls = /*#__PURE__*/function (_OrbitControls) {
   return _createClass(MapControls);
 }(OrbitControls);
 exports.MapControls = MapControls;
-},{"three":"../node_modules/three/build/three.module.js"}],"assets/main/demo2.js":[function(require,module,exports) {
+},{"three":"../node_modules/three/build/three.module.js"}],"../node_modules/three/examples/jsm/libs/stats.module.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var Stats = function Stats() {
+  var mode = 0;
+  var container = document.createElement('div');
+  container.style.cssText = 'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
+  container.addEventListener('click', function (event) {
+    event.preventDefault();
+    showPanel(++mode % container.children.length);
+  }, false);
+
+  //
+
+  function addPanel(panel) {
+    container.appendChild(panel.dom);
+    return panel;
+  }
+  function showPanel(id) {
+    for (var i = 0; i < container.children.length; i++) {
+      container.children[i].style.display = i === id ? 'block' : 'none';
+    }
+    mode = id;
+  }
+
+  //
+
+  var beginTime = (performance || Date).now(),
+    prevTime = beginTime,
+    frames = 0;
+  var fpsPanel = addPanel(new Stats.Panel('FPS', '#0ff', '#002'));
+  var msPanel = addPanel(new Stats.Panel('MS', '#0f0', '#020'));
+  if (self.performance && self.performance.memory) {
+    var memPanel = addPanel(new Stats.Panel('MB', '#f08', '#201'));
+  }
+  showPanel(0);
+  return {
+    REVISION: 16,
+    dom: container,
+    addPanel: addPanel,
+    showPanel: showPanel,
+    begin: function begin() {
+      beginTime = (performance || Date).now();
+    },
+    end: function end() {
+      frames++;
+      var time = (performance || Date).now();
+      msPanel.update(time - beginTime, 200);
+      if (time >= prevTime + 1000) {
+        fpsPanel.update(frames * 1000 / (time - prevTime), 100);
+        prevTime = time;
+        frames = 0;
+        if (memPanel) {
+          var memory = performance.memory;
+          memPanel.update(memory.usedJSHeapSize / 1048576, memory.jsHeapSizeLimit / 1048576);
+        }
+      }
+      return time;
+    },
+    update: function update() {
+      beginTime = this.end();
+    },
+    // Backwards Compatibility
+
+    domElement: container,
+    setMode: showPanel
+  };
+};
+Stats.Panel = function (name, fg, bg) {
+  var min = Infinity,
+    max = 0,
+    round = Math.round;
+  var PR = round(window.devicePixelRatio || 1);
+  var WIDTH = 80 * PR,
+    HEIGHT = 48 * PR,
+    TEXT_X = 3 * PR,
+    TEXT_Y = 2 * PR,
+    GRAPH_X = 3 * PR,
+    GRAPH_Y = 15 * PR,
+    GRAPH_WIDTH = 74 * PR,
+    GRAPH_HEIGHT = 30 * PR;
+  var canvas = document.createElement('canvas');
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+  canvas.style.cssText = 'width:80px;height:48px';
+  var context = canvas.getContext('2d');
+  context.font = 'bold ' + 9 * PR + 'px Helvetica,Arial,sans-serif';
+  context.textBaseline = 'top';
+  context.fillStyle = bg;
+  context.fillRect(0, 0, WIDTH, HEIGHT);
+  context.fillStyle = fg;
+  context.fillText(name, TEXT_X, TEXT_Y);
+  context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);
+  context.fillStyle = bg;
+  context.globalAlpha = 0.9;
+  context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);
+  return {
+    dom: canvas,
+    update: function update(value, maxValue) {
+      min = Math.min(min, value);
+      max = Math.max(max, value);
+      context.fillStyle = bg;
+      context.globalAlpha = 1;
+      context.fillRect(0, 0, WIDTH, GRAPH_Y);
+      context.fillStyle = fg;
+      context.fillText(round(value) + ' ' + name + ' (' + round(min) + '-' + round(max) + ')', TEXT_X, TEXT_Y);
+      context.drawImage(canvas, GRAPH_X + PR, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT, GRAPH_X, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT);
+      context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, GRAPH_HEIGHT);
+      context.fillStyle = bg;
+      context.globalAlpha = 0.9;
+      context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round((1 - value / maxValue) * GRAPH_HEIGHT));
+    }
+  };
+};
+var _default = Stats;
+exports.default = _default;
+},{}],"assets/main/demo2.js":[function(require,module,exports) {
 "use strict";
 
 var THREE = _interopRequireWildcard(require("three"));
 var _OrbitControls = require("three/examples/jsm/controls/OrbitControls.js");
+var _statsModule = _interopRequireDefault(require("three/examples/jsm/libs/stats.module.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //场景
@@ -37007,6 +37129,15 @@ var scene = new THREE.Scene();
 var mainCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 mainCamera.position.set(0, 0, 10);
 scene.add(mainCamera);
+
+//灯光,环境光
+var light = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(light);
+
+//直线光
+var direLight = new THREE.DirectionalLight(0xffffff, 0.5);
+direLight.position.set(10, 10, 10);
+scene.add(direLight);
 
 //渲染器
 var render = new THREE.WebGL1Renderer();
@@ -37022,10 +37153,29 @@ orbitVC.enableDamping = true;
 //创建Cube
 //creatPlanObject();
 // creatSanObject();
-creatBoxObject();
+// creatBoxObject();
+// creatSamllObject();
+textDemo1();
+
+//性能监视器
+var statsPanel = new _statsModule.default();
+
+//设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
+statsPanel.setMode(0);
+
+//设置监视器位置
+statsPanel.domElement.style.position = 'absolute';
+statsPanel.domElement.style.left = '0px';
+statsPanel.domElement.style.top = '0px';
+
+//将监视器添加到页面中
+document.body.appendChild(statsPanel.domElement);
 
 //渲染场景
 function onUpdate() {
+  //更新帧率
+  statsPanel.update();
+  //
   render.render(scene, mainCamera);
   requestAnimationFrame(onUpdate); //每帧渲染
 }
@@ -37082,16 +37232,103 @@ function creatBoxObject() {
   var textureLoader = new THREE.TextureLoader();
   var tvTexture = textureLoader.load("./textures/tv.png");
 
+  //偏移
+  // tvTexture.offset.x = 0.5;
+  // tvTexture.offset.y = 0.5;
+  ////tvTexture.offset.set(0.5, 0.5);
+
+  //旋转
+  // tvTexture.rotation = Math.PI / 4;
+  // tvTexture.center.set(0.5, 0.5); //设置中心点
+
+  //重复
+  // tvTexture.repeat.set(2, 3);//水平2次，垂直3次
+  // tvTexture.wrapS = THREE.RepeatWrapping;//模式
+  // tvTexture.wrapT = THREE.MirroredRepeatWrapping;//镜像重复
+
+  //透明纹理(黑色：完全透明；白色：完全不透明)
+  var alphaTexture = textureLoader.load("./textures/tv_alpha.png");
+
+  //环境遮挡贴图
+  var aoTexture = textureLoader.load("./textures/tv_border.png");
+
   //box
   var geometry = new THREE.BoxGeometry(5, 5, 5);
   var material = new THREE.MeshBasicMaterial({
     color: 0xffff00,
-    map: tvTexture
+    map: tvTexture,
+    alphaMap: alphaTexture,
+    transparent: true,
+    //允许透明
+    aoMap: aoTexture,
+    aoMapIntensity: 0.5 //强度
+    // opacity: 0.1,
+    // side: THREE.BackSide,  //渲染哪一面（前、背、两者）
+  });
+
+  var boxMesh = new THREE.Mesh(geometry, material);
+  scene.add(boxMesh);
+
+  //环境贴图需要设置第二组UV
+  geometry.setAttribute("uv2", new THREE.BufferAttribute(geometry.attributes.uv.array, 2));
+}
+
+//纹理显示
+function creatSamllObject() {
+  //加载图片纹理
+  var textureLoader = new THREE.TextureLoader();
+  var smallTexture = textureLoader.load("./textures/wall10_ne.png");
+
+  //模糊
+  smallTexture.minFilter = THREE.LinearFilter;
+  smallTexture.magFilter = THREE.LinearFilter;
+
+  //像素
+  // smallTexture.minFilter = THREE.NearestFilter;
+  // smallTexture.magFilter = THREE.NearestFilter;
+
+  //box
+  var geometry = new THREE.BoxGeometry(1, 1, 1);
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xffff00,
+    map: smallTexture
   });
   var boxMesh = new THREE.Mesh(geometry, material);
   scene.add(boxMesh);
 }
-},{"three":"../node_modules/three/build/three.module.js","three/examples/jsm/controls/OrbitControls.js":"../node_modules/three/examples/jsm/controls/OrbitControls.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function textDemo1() {
+  //加载图片纹理
+  var textureLoader = new THREE.TextureLoader();
+  var tvTexture = textureLoader.load("./textures/tv.png");
+
+  //透明纹理(黑色：完全透明；白色：完全不透明)
+  var alphaTexture = textureLoader.load("./textures/tv_alpha.png");
+
+  //环境遮挡贴图
+  var aoTexture = textureLoader.load("./textures/tv_border.png");
+
+  //置换贴图，提高纹理效果
+  var hightTexture = textureLoader.load("./textures/tv_border.png");
+
+  //标准材质
+  var geometry = new THREE.BoxGeometry(5, 5, 5);
+  var material = new THREE.MeshStandardMaterial({
+    color: 0xffff00,
+    map: tvTexture,
+    alphaMap: alphaTexture,
+    transparent: true,
+    //允许透明
+    aoMap: aoTexture,
+    aoMapIntensity: 1,
+    //强度
+    displacementMap: hightTexture,
+    //
+    displacementScale: 0.1
+  });
+  var boxMesh = new THREE.Mesh(geometry, material);
+  scene.add(boxMesh);
+}
+},{"three":"../node_modules/three/build/three.module.js","three/examples/jsm/controls/OrbitControls.js":"../node_modules/three/examples/jsm/controls/OrbitControls.js","three/examples/jsm/libs/stats.module.js":"../node_modules/three/examples/jsm/libs/stats.module.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -37116,7 +37353,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52591" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59890" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

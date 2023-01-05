@@ -13,7 +13,7 @@
     },
 
 6. 执行npm install three --save, 安装Three模块
-7. 执行 npm run dev, 启动本地环境
+7. 执行 npm run dev, 启动本地环境（syscall open错误，目录不对，需要在study中执行）
 8. 报错operation not permitted, uv_cwd，重新vscode
 
 9. 动画库 npm install gsap

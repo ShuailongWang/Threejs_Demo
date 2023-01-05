@@ -2,10 +2,10 @@
   "name": "study",
   "version": "1.0.0",
   "description": "",
-  "main": "demo2.js",
+  "main": "demo3.js",
   "scripts": {
-    "dev": "parcel src/demo2.html",
-    "build": "parcel build src/demo2.html"
+    "dev": "parcel src/demo3.html",
+    "build": "parcel build src/demo3.html"
   },
   "author": "",
   "license": "ISC",
